@@ -4,6 +4,7 @@ import { Repository, Connection } from 'typeorm';
 import { User } from './user.entity';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
+import { UserNotFoundException } from './exceptions/user-not-found.exception';
 
 @Injectable()
 export class UsersService {
@@ -28,6 +29,10 @@ export class UsersService {
   update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
     return this.connection.transaction(async () => {
       const user = await this.findOneById(id);
+
+      if (!user) {
+        throw new UserNotFoundException();
+      }
 
       return this.usersRepository.save({
         ...user,
