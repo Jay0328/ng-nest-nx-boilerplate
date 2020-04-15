@@ -9,7 +9,7 @@ import {
   BadRequestException,
   NotFoundException
 } from '@nestjs/common';
-import { User } from './user.entity';
+import { UserEntity } from './user.entity';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
@@ -31,7 +31,7 @@ export class UsersController {
   }
 
   @Get(':userId')
-  async findOne(@Param('userId', UserByIdPipe) user: User) {
+  async findOne(@Param('userId', UserByIdPipe) user: UserEntity) {
     if (!user) {
       throw new NotFoundException();
     }

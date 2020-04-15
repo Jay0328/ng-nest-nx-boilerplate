@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Connection } from 'typeorm';
-import { User } from './user.entity';
+import { UserEntity } from './user.entity';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserNotFoundException } from './exceptions/user-not-found.exception';
@@ -9,24 +9,24 @@ import { UserNotFoundException } from './exceptions/user-not-found.exception';
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(User)
-    private readonly usersRepository: Repository<User>,
+    @InjectRepository(UserEntity)
+    private readonly usersRepository: Repository<UserEntity>,
     private readonly connection: Connection
   ) {}
 
-  findOneById(id: string): Promise<User> {
+  findOneById(id: string): Promise<UserEntity> {
     return this.usersRepository.findOne(id);
   }
 
-  findAll(): Promise<User[]> {
+  findAll(): Promise<UserEntity[]> {
     return this.usersRepository.find();
   }
 
-  create(createUserDto: CreateUserDto): Promise<User> {
+  create(createUserDto: CreateUserDto): Promise<UserEntity> {
     return this.usersRepository.save(createUserDto);
   }
 
-  update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
+  update(id: string, updateUserDto: UpdateUserDto): Promise<UserEntity> {
     return this.connection.transaction(async () => {
       const user = await this.findOneById(id);
 
