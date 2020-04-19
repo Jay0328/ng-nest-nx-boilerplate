@@ -1,16 +1,22 @@
-import { PipeTransform, Injectable, BadRequestException } from '@nestjs/common';
-import { UserEntity } from '../user.entity';
-import { UsersService } from '../users.service';
+import { PipeTransform, Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import { UserEntity } from '../entities/user.entity';
+import { UsersService } from '../services/users.service';
 
 @Injectable()
 export class UserByIdPipe implements PipeTransform<any, Promise<UserEntity>> {
   constructor(private readonly usersService: UsersService) {}
 
-  transform(userId: any) {
+  async transform(userId: any) {
     if (typeof userId !== 'string') {
       throw new BadRequestException();
     }
 
-    return this.usersService.findOneById(userId);
+    const user = await this.usersService.findOneById(userId);
+
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    return user;
   }
 }

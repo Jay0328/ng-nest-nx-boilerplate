@@ -34,4 +34,6 @@ lerna-debug.log*
 !.vscode/extensions.json
 
 # Configuration
-ormconfig.json
+/src/config/config.ts
+/src/config/config.dev.ts
+/src/config/config.prod.ts

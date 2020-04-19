@@ -1,18 +1,9 @@
-import {
-  Controller,
-  Param,
-  Get,
-  Post,
-  Put,
-  Delete,
-  Body,
-  BadRequestException,
-  NotFoundException
-} from '@nestjs/common';
-import { UserEntity } from './user.entity';
-import { UsersService } from './users.service';
-import { CreateUserDto } from './dtos/create-user.dto';
-import { UpdateUserDto } from './dtos/update-user.dto';
+import { Controller, Param, Get, Post, Put, Delete, Body, BadRequestException } from '@nestjs/common';
+import { UserEntity } from './entities/user.entity';
+import { UsersService } from './services/users.service';
+import { CreateUserInput } from './inputs/create-user.input';
+import { UpdateUserInput } from './inputs/update-user.input';
+import { UserExistedException } from './exceptions/user-existed.exception';
 import { UserNotFoundException } from './exceptions/user-not-found.exception';
 import { UserByIdPipe } from './pipes/user-by-id.pipe';
 
@@ -26,25 +17,29 @@ export class UsersController {
   }
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  async create(@Body() createUserInput: CreateUserInput) {
+    try {
+      return await this.usersService.create(createUserInput);
+    } catch (error) {
+      if (error instanceof UserExistedException) {
+        throw new BadRequestException();
+      } else {
+        throw error;
+      }
+    }
   }
 
   @Get(':userId')
-  async findOne(@Param('userId', UserByIdPipe) user: UserEntity) {
-    if (!user) {
-      throw new NotFoundException();
-    }
-
+  findOne(@Param('userId', UserByIdPipe) user: UserEntity) {
     return user;
   }
 
   @Put(':userId')
-  async update(@Param('userId') userId: string, @Body() updateUserDto: UpdateUserDto) {
+  async update(@Param('userId') userId: string, @Body() updateUserInput: UpdateUserInput) {
     try {
-      return await this.usersService.update(userId, updateUserDto);
+      return await this.usersService.update(userId, updateUserInput);
     } catch (error) {
-      if (error instanceof UserNotFoundException) {
+      if (error instanceof UserNotFoundException || error instanceof UserExistedException) {
         throw new BadRequestException();
       } else {
         throw error;
