@@ -35,5 +35,5 @@ lerna-debug.log*
 
 # Configuration
 /src/config/config.ts
-/src/config/config.dev.ts
-/src/config/config.prod.ts
+/src/config/config.*.ts
+!src/config/config.{module,example}.ts
