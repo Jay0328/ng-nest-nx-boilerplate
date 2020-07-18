@@ -14,7 +14,7 @@ import * as bcrypt from 'bcrypt';
 import { CreateDateColumn, UpdateDateColumn } from '../../shared/decorators/date-columns.decorator';
 
 @Entity('users')
-@Unique(['email'])
+@Unique('id_email', ['id', 'email'] as (keyof UserEntity)[])
 export class UserEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: number;
@@ -40,7 +40,7 @@ export class UserEntity extends BaseEntity {
 
   @BeforeInsert()
   @BeforeUpdate()
-  setHashPassword() {
+  setHashPassword(): void {
     if (this.password) {
       this.password = bcrypt.hashSync(this.password, bcrypt.genSaltSync(10));
     }
@@ -52,7 +52,7 @@ export class UserEntity extends BaseEntity {
    */
   @AfterInsert()
   @AfterUpdate()
-  removePassword() {
+  removePassword(): void {
     delete this.password;
   }
 }
