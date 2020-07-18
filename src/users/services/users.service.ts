@@ -4,7 +4,7 @@ import { Repository, Connection, SelectQueryBuilder } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
 import { CreateUserInput } from '../inputs/create-user.input';
 import { UpdateUserInput } from '../inputs/update-user.input';
-import { UserExistedException } from '../exceptions/user-existed.exception';
+import { UserAlreadyExistedException } from '../exceptions/user-already-existed.exception';
 import { UserNotFoundException } from '../exceptions/user-not-found.exception';
 
 export interface UserFindOneOptions {
@@ -23,7 +23,7 @@ export class UsersService {
     const user = await this.findOneByEmail(email);
 
     if (user) {
-      throw new UserExistedException();
+      throw new UserAlreadyExistedException();
     }
   }
 

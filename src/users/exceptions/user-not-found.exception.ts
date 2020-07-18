@@ -1,5 +1,7 @@
 export class UserNotFoundException extends Error {
+  static readonly code = '[User] Not Found';
+
   constructor() {
-    super('User Not Found');
+    super(UserNotFoundException.code);
   }
 }

@@ -3,7 +3,7 @@ import { UserEntity } from './entities/user.entity';
 import { UsersService } from './services/users.service';
 import { CreateUserInput } from './inputs/create-user.input';
 import { UpdateUserInput } from './inputs/update-user.input';
-import { UserExistedException } from './exceptions/user-existed.exception';
+import { UserAlreadyExistedException } from './exceptions/user-already-existed.exception';
 import { UserNotFoundException } from './exceptions/user-not-found.exception';
 import { UserByIdPipe } from './pipes/user-by-id.pipe';
 
@@ -21,7 +21,7 @@ export class UsersController {
     try {
       return await this.usersService.create(createUserInput);
     } catch (error) {
-      if (error instanceof UserExistedException) {
+      if (error instanceof UserAlreadyExistedException) {
         throw new BadRequestException();
       } else {
         throw error;
@@ -39,7 +39,7 @@ export class UsersController {
     try {
       return await this.usersService.update(userId, updateUserInput);
     } catch (error) {
-      if (error instanceof UserNotFoundException || error instanceof UserExistedException) {
+      if (error instanceof UserNotFoundException || error instanceof UserAlreadyExistedException) {
         throw new BadRequestException();
       } else {
         throw error;

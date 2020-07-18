@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { Config } from './typings/config.typings';
+import { Config } from './config.typings';
 
 export const config: Config = {
   database: {

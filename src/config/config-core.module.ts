@@ -1,5 +1,5 @@
-import { Module, DynamicModule, Global } from '@nestjs/common';
-import { CONFIG_TOKEN } from './constants/config-token.constant';
+import { Module, Global, DynamicModule } from '@nestjs/common';
+import { CONFIG_TOKEN } from './config-token.constant';
 
 export interface ConfigCoreModuleRegisterOptions {
   files?: {
