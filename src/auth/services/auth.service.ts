@@ -17,7 +17,7 @@ function generateAuthPayload<T extends AuthPayload>(data: T): AuthPayload {
 export class AuthService {
   constructor(private readonly usersService: UsersService, @InjectConfig() private readonly config: Config) {}
 
-  private validateUserPassword(user: UserEntity, password: string): boolean {
+  private isUserPasswordCorrect(user: UserEntity, password: string): boolean {
     return bcrypt.compareSync(password, user.password);
   }
 
@@ -44,9 +44,9 @@ export class AuthService {
   }
 
   async validateUser(email: string, password: string): Promise<UserEntity | undefined> {
-    const user = await this.usersService.findOneByIdOrFail(email, { selectPassword: true });
+    const user = await this.usersService.findOneByEmail(email, { selectPassword: true });
 
-    if (!user || this.validateUserPassword(user, password)) {
+    if (!user || !this.isUserPasswordCorrect(user, password)) {
       return undefined;
     }
 
