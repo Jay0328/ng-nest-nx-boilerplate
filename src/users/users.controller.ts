@@ -1,4 +1,5 @@
 import { Controller, Param, Get, Post, Put, Delete, Body, BadRequestException } from '@nestjs/common';
+import { Auth } from '../auth/decorators/auth.decorator';
 import { UserNotFoundException } from './exceptions/user-not-found.exception';
 import { UserEmailAlreadyUsedException } from './exceptions/user-email-already-used.exception';
 import { UserEntity } from './entities/user.entity';
@@ -37,6 +38,7 @@ export class UsersController {
   }
 
   @Put(':userId')
+  @Auth({ shouldBeSelfUserIdParam: 'userId' })
   async update(@Param('userId') userId: string, @Body() updateUserInput: UpdateUserInput): Promise<void> {
     try {
       await this.usersService.update(userId, updateUserInput);
@@ -50,6 +52,7 @@ export class UsersController {
   }
 
   @Delete(':userId')
+  @Auth({ shouldBeSelfUserIdParam: 'userId' })
   async delete(@Param('userId') userId: string): Promise<void> {
     try {
       await this.usersService.delete(userId);
