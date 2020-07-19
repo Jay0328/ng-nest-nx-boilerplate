@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
 import { pick } from 'lodash';
@@ -35,27 +35,7 @@ export class AuthService {
     });
   }
 
-  private verifyRefreshToken(token: string): JwtPayload {
-    return jwt.verify(token, this.config.jwt.refreshToken.secret) as JwtPayload;
-  }
-
-  verifyAccessToken(token: string): JwtPayload {
-    return jwt.verify(token, this.config.jwt.accessToken.secret) as JwtPayload;
-  }
-
-  async validateUser(email: string, password: string): Promise<UserEntity | undefined> {
-    const user = await this.usersService.findOneByEmail(email, { selectPassword: true });
-
-    if (!user || !this.isUserPasswordCorrect(user, password)) {
-      return undefined;
-    }
-
-    user.removePassword();
-
-    return user;
-  }
-
-  signAuthTokens(user: UserEntity) {
+  private signAuthTokens(user: UserEntity) {
     const payload = generateAuthPayload(user);
     const accessToken = this.signAccessToken(payload);
     const refreshToken = this.signRefreshToken(payload);
@@ -66,7 +46,26 @@ export class AuthService {
     };
   }
 
-  resignAccessTokenFromRefreshToken(refreshToken: string): string {
+  private verifyRefreshToken(token: string): JwtPayload {
+    return jwt.verify(token, this.config.jwt.refreshToken.secret) as JwtPayload;
+  }
+
+  verifyAccessToken(token: string): JwtPayload {
+    return jwt.verify(token, this.config.jwt.accessToken.secret) as JwtPayload;
+  }
+
+  async login(email: string, password: string) {
+    const user = await this.usersService.findOneByEmail(email, { selectPassword: true });
+
+    if (!user || !this.isUserPasswordCorrect(user, password)) {
+      throw new UnauthorizedException();
+    }
+
+    user.removePassword();
+    return this.signAuthTokens(user);
+  }
+
+  refreshToken(refreshToken: string): string {
     try {
       const payload = this.verifyRefreshToken(refreshToken);
 
