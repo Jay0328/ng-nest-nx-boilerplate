@@ -10,7 +10,7 @@ export class AuthController {
 
   @LoginRoute('login')
   login(@Request() req) {
-    return this.authService.login(req.user);
+    return this.authService.signAuthTokens(req.user);
   }
 
   @Post('refresh')

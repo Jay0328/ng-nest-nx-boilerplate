@@ -13,11 +13,14 @@ import { Exclude } from 'class-transformer';
 import * as bcrypt from 'bcrypt';
 import { CreateDateColumn, UpdateDateColumn } from '../../shared/decorators/date-columns.decorator';
 
+/**
+ * Email should be unique.
+ */
 @Entity('users')
-@Unique('id_email', ['id', 'email'] as (keyof UserEntity)[])
+@Unique(['email'])
 export class UserEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
-  id: number;
+  id: string;
 
   @Column()
   email: string;

@@ -10,7 +10,7 @@ import { AuthPayload, JwtPayload } from '../typings/auth.typings';
 import { InvalidRefreshTokenException } from '../exceptions/invalid-refresh-token-exception';
 
 function generateAuthPayload<T extends AuthPayload>(data: T): AuthPayload {
-  return pick(data, ['email', 'firstName', 'lastName']);
+  return pick(data, ['id', 'email', 'firstName', 'lastName'] as const);
 }
 
 @Injectable()
@@ -39,8 +39,12 @@ export class AuthService {
     return jwt.verify(token, this.config.jwt.refreshToken.secret) as JwtPayload;
   }
 
+  verifyAccessToken(token: string): JwtPayload {
+    return jwt.verify(token, this.config.jwt.accessToken.secret) as JwtPayload;
+  }
+
   async validateUser(email: string, password: string): Promise<UserEntity | undefined> {
-    const user = await this.usersService.findOneByEmail(email, { selectPassword: true });
+    const user = await this.usersService.findOneByIdOrFail(email, { selectPassword: true });
 
     if (!user || this.validateUserPassword(user, password)) {
       return undefined;
@@ -51,7 +55,7 @@ export class AuthService {
     return user;
   }
 
-  async login(user: UserEntity) {
+  signAuthTokens(user: UserEntity) {
     const payload = generateAuthPayload(user);
     const accessToken = this.signAccessToken(payload);
     const refreshToken = this.signRefreshToken(payload);
@@ -62,7 +66,7 @@ export class AuthService {
     };
   }
 
-  resignAccessTokenFromRefreshToken(refreshToken: string) {
+  resignAccessTokenFromRefreshToken(refreshToken: string): string {
     try {
       const payload = this.verifyRefreshToken(refreshToken);
 

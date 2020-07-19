@@ -1,7 +1,7 @@
 export class UserNotFoundException extends Error {
-  static readonly code = '[User] Not Found';
+  static readonly message = '[User] Not Found';
 
   constructor() {
-    super(UserNotFoundException.code);
+    super(UserNotFoundException.message);
   }
 }
