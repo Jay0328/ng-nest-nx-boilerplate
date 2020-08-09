@@ -27,7 +27,7 @@ export class UsersController {
   @Get(':userId')
   async findOne(@Param('userId') userId: string): Promise<UserEntity> {
     try {
-      return await this.usersService.findOneByIdOrFail(userId);
+      return await this.usersService.findOneOrFail({ id: userId });
     } catch (error) {
       if (error instanceof UserNotFoundException) {
         throw new BadRequestException(error.message);
