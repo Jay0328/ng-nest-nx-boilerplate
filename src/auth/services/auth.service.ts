@@ -1,7 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
-import { pick } from 'lodash';
 import { InjectConfig } from '../../config/inject-config.decorator';
 import { Config } from '../../config/config.typings';
 import { UserEntity } from '../../users/entities/user.entity';
@@ -9,8 +8,9 @@ import { UsersService } from '../../users/services/users.service';
 import { AuthPayload, JwtPayload } from '../typings/auth.typings';
 import { InvalidRefreshTokenException } from '../exceptions/invalid-refresh-token-exception';
 
-function generateAuthPayload<T extends AuthPayload>(data: T): AuthPayload {
-  return pick(data, ['id', 'email', 'firstName', 'lastName'] as const);
+function generateAuthPayload(data: AuthPayload): AuthPayload {
+  const { id, email, firstName, lastName } = data;
+  return { id, email, firstName, lastName };
 }
 
 @Injectable()
@@ -61,7 +61,6 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    user.removePassword();
     return this.signAuthTokens(user);
   }
 

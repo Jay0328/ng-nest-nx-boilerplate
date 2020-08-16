@@ -1,10 +1,8 @@
 import { IsEmail, IsString, IsNotEmpty } from 'class-validator';
-import { IsUserEmailNotUsed } from '../decorators/is-user-email-not-used.decorator';
 
-export class CreateUserInput {
+export class CreateUserDto {
   @IsNotEmpty()
   @IsEmail()
-  @IsUserEmailNotUsed()
   email: string;
 
   @IsNotEmpty()

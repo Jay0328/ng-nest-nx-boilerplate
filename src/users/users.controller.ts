@@ -1,20 +1,21 @@
 import { Controller, Param, Get, Post, Put, Delete, Body, BadRequestException } from '@nestjs/common';
+import { Connection } from 'typeorm';
 import { Auth } from '../auth/decorators/auth.decorator';
 import { UserNotFoundException } from './exceptions/user-not-found.exception';
 import { UserEmailAlreadyUsedException } from './exceptions/user-email-already-used.exception';
 import { UserEntity } from './entities/user.entity';
 import { UsersService } from './services/users.service';
-import { CreateUserInput } from './inputs/create-user.input';
-import { UpdateUserInput } from './inputs/update-user.input';
+import { CreateUserDto } from './dtos/create-user.dto';
+import { UpdateUserDto } from './dtos/update-user.dto';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly connection: Connection, private readonly usersService: UsersService) {}
 
   @Post()
-  async create(@Body() createUserInput: CreateUserInput): Promise<UserEntity> {
+  async create(@Body() createUserDto: CreateUserDto): Promise<UserEntity> {
     try {
-      return await this.usersService.create(createUserInput);
+      return await this.usersService.create(createUserDto);
     } catch (error) {
       if (error instanceof UserEmailAlreadyUsedException) {
         throw new BadRequestException(error.message);
@@ -39,9 +40,11 @@ export class UsersController {
 
   @Put(':userId')
   @Auth({ shouldBeSelfUserIdParam: 'userId' })
-  async update(@Param('userId') userId: string, @Body() updateUserInput: UpdateUserInput): Promise<void> {
+  async update(@Param('userId') userId: string, @Body() updateUserDto: UpdateUserDto): Promise<void> {
     try {
-      await this.usersService.update(userId, updateUserInput);
+      await this.connection.transaction(transactionalManager =>
+        this.usersService.update(userId, updateUserDto, transactionalManager)
+      );
     } catch (error) {
       if (error instanceof UserNotFoundException || error instanceof UserEmailAlreadyUsedException) {
         throw new BadRequestException(error.message);
@@ -55,7 +58,7 @@ export class UsersController {
   @Auth({ shouldBeSelfUserIdParam: 'userId' })
   async delete(@Param('userId') userId: string): Promise<void> {
     try {
-      await this.usersService.delete(userId);
+      await this.connection.transaction(transactionalManager => this.usersService.delete(userId, transactionalManager));
     } catch (error) {
       if (error instanceof UserNotFoundException) {
         throw new BadRequestException(error.message);

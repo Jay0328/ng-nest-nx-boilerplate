@@ -11,7 +11,8 @@ export type NullableTypeOrmQueryBuilderPipeOperator<Entity extends ObjectLiteral
   | false
   | null
   | undefined
-  | number;
+  | 0
+  | '';
 
 export interface PipeableSelectQueryBuilder<Entity extends ObjectLiteral> extends SelectQueryBuilder<Entity> {
   pipe(...operators: NullableTypeOrmQueryBuilderPipeOperator<Entity>[]): PipeableSelectQueryBuilder<Entity>;
