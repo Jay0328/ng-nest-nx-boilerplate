@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { CONFIG_TOKEN } from './config-token.constant';
+import { CONFIG_TOKEN } from './config-token';
 import { ConfigCoreModule } from './config-core.module';
 
 @Module({

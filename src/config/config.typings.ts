@@ -1,15 +1,17 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { GqlModuleOptions } from '@nestjs/graphql';
 
 export interface Config {
   database: TypeOrmModuleOptions;
+  gql: GqlModuleOptions;
   jwt: {
     accessToken: {
       secret: string;
-      expiredIn?: string | number;
+      expiresIn?: string | number;
     };
     refreshToken: {
       secret: string;
-      expiredIn?: string | number;
+      expiresIn?: string | number;
     };
   };
 }

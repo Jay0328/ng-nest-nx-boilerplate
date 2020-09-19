@@ -10,16 +10,22 @@ export const config: Config = {
     password: 'password',
     database: 'database',
     entities: [path.resolve(__dirname, '../**/*.entity{.ts,.js}')],
-    synchronize: true
+    synchronize: false
+  },
+  gql: {
+    autoSchemaFile: path.resolve(__dirname, '..', 'schema.gql'),
+    debug: false,
+    playground: true,
+    sortSchema: true
   },
   jwt: {
     accessToken: {
       secret: 'secret',
-      expiredIn: 900
+      expiresIn: 900
     },
     refreshToken: {
       secret: 'secret',
-      expiredIn: '180 days'
+      expiresIn: '180 days'
     }
   }
 };
