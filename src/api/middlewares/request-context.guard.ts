@@ -1,5 +1,5 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { getRequestFromExecutionContext } from '../../common/get-request-from-execution-context';
+import { getRequestFromExecutionContext } from '../common/get-request-from-execution-context';
 import { RequestContextService } from '../../request-context/request-context.service';
 
 @Injectable()

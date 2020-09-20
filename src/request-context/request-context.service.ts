@@ -15,7 +15,7 @@ export class RequestContextService {
     }
 
     try {
-      return this.authService.verify(accessToken, 'accessToken');
+      return this.authService.verifyAuthToken(accessToken, 'accessToken');
     } catch {
       return undefined;
     }

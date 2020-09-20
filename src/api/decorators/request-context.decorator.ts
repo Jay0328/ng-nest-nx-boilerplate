@@ -1,5 +1,5 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { getRequestFromExecutionContext } from '../../common/get-request-from-execution-context';
+import { getRequestFromExecutionContext } from '../common/get-request-from-execution-context';
 import { RequestContext } from '../../request-context/request-context';
 
 /**

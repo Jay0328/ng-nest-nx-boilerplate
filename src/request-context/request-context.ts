@@ -8,7 +8,7 @@ import { AuthPayload } from '../core/auth/auth-payload.typings';
  * required at various points of the stack.
  */
 export class RequestContext {
-  static readonly key = '__RequestContextKey__';
+  static readonly key = Symbol('__RequestContextKey__');
 
   static getFromRequest(request: Request): RequestContext {
     return (request as any)[RequestContext.key];

@@ -1,12 +1,14 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, Config } from '../config';
+import { TransactionalConnection } from '../orm';
 import { UserEntity } from './users/user.entity';
 import { UsersService } from './users/users.service';
 import { AuthService } from './auth/auth.service';
 
 const entities = [UserEntity];
 const services = [UsersService, AuthService];
+const providers = [TransactionalConnection];
 
 @Module({
   imports: [
@@ -18,7 +20,7 @@ const services = [UsersService, AuthService];
     }),
     TypeOrmModule.forFeature([...entities])
   ],
-  providers: [...services],
-  exports: [...services]
+  providers: [...providers, ...services],
+  exports: [...providers, ...services]
 })
 export class CoreModule {}

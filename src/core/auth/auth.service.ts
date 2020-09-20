@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
 import { InjectConfig, Config } from '../../config';
+import { RequestContext } from '../../request-context/request-context';
 import { UserEntity } from '../users/user.entity';
 import { UsersService } from '../users/users.service';
 import { AuthPayload, JwtPayload } from './auth-payload.typings';
@@ -24,7 +25,7 @@ export class AuthService {
     return this.filterAuthPayload(user);
   }
 
-  sign(user: UserEntity, type: keyof Config['jwt']): string {
+  signAuthToken(user: UserEntity, type: keyof Config['jwt']): string {
     const { secret, expiresIn } = this.config.jwt[type];
 
     return jwt.sign(this.getAuthPayloadFromUser(user), secret, {
@@ -33,19 +34,19 @@ export class AuthService {
     });
   }
 
-  verify(token: string, type: keyof Config['jwt']): JwtPayload {
+  verifyAuthToken(token: string, type: keyof Config['jwt']): JwtPayload {
     return jwt.verify(token, this.config.jwt[type].secret) as JwtPayload;
   }
 
-  async login(email: string, password: string): Promise<AuthTokensDto> {
-    const user = await this.usersService.findOneWithPasswordByEmail(email);
+  async login(ctx: RequestContext, email: string, password: string): Promise<AuthTokensDto> {
+    const user = await this.usersService.findOneForLogin(ctx, email);
 
     if (!user || !this.isUserPasswordCorrect(user, password)) {
       throw new UnauthorizedException();
     }
 
-    const accessToken = this.sign(user, 'accessToken');
-    const refreshToken = this.sign(user, 'refreshToken');
+    const accessToken = this.signAuthToken(user, 'accessToken');
+    const refreshToken = this.signAuthToken(user, 'refreshToken');
 
     return {
       accessToken,
@@ -53,11 +54,11 @@ export class AuthService {
     };
   }
 
-  async refreshToken(refreshToken: string): Promise<string> {
+  async refreshToken(ctx: RequestContext, refreshToken: string): Promise<string> {
     try {
-      const { id } = this.verify(refreshToken, 'refreshToken');
-      const user = await this.usersService.findOneOrFail(id);
-      return this.sign(user, 'accessToken');
+      const { id } = this.verifyAuthToken(refreshToken, 'refreshToken');
+      const user = await this.usersService.findOneOrFail(ctx, id);
+      return this.signAuthToken(user, 'accessToken');
     } catch {
       throw new InvalidRefreshTokenException();
     }

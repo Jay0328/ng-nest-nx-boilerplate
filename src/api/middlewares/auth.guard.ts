@@ -1,6 +1,6 @@
 import { Reflector } from '@nestjs/core';
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
-import { getRequestFromExecutionContext } from '../../common/get-request-from-execution-context';
+import { getRequestFromExecutionContext } from '../common/get-request-from-execution-context';
 import { RequestContextService } from '../../request-context/request-context.service';
 
 export const AUTH_GURARD_OPTIONS_METADAT_KEY = Symbol('Auth Guard Options');

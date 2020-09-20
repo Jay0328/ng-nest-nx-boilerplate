@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { EntityManager, FindOneOptions, Repository } from 'typeorm';
+import { FindOneOptions } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { EntityID } from '../../orm';
+import { RequestContext } from '../../request-context/request-context';
+import { EntityID, TransactionalConnection } from '../../orm';
 import { UserNotFoundException } from './exceptions/user-not-found.exception';
 import { UserEmailAlreadyUsedException } from './exceptions/user-email-already-used.exception';
 import { UserEntity } from './user.entity';
@@ -15,33 +15,14 @@ function encryptUserPassword(password: string) {
 
 @Injectable()
 export class UsersService {
-  constructor(
-    @InjectRepository(UserEntity)
-    private readonly usersRepository: Repository<UserEntity>
-  ) {}
+  constructor(private readonly connection: TransactionalConnection) {}
 
-  private getUsersRepository(manager?: EntityManager): Repository<UserEntity> {
-    return manager?.getRepository(UserEntity) ?? this.usersRepository;
+  findOne(ctx: RequestContext, id: EntityID): Promise<UserEntity | undefined> {
+    return this.connection.getRepository(ctx, UserEntity).findOne(id);
   }
 
-  private async findOneForUpdate(id: EntityID, manager: EntityManager): Promise<UserEntity> {
-    try {
-      return await this.getUsersRepository(manager).findOneOrFail(id, {
-        lock: {
-          mode: 'pessimistic_write'
-        }
-      });
-    } catch {
-      throw new UserNotFoundException();
-    }
-  }
-
-  findOne(id: EntityID): Promise<UserEntity | undefined> {
-    return this.usersRepository.findOne(id);
-  }
-
-  async findOneOrFail(id: EntityID): Promise<UserEntity> {
-    const user = await this.findOne(id);
+  async findOneOrFail(ctx: RequestContext, id: EntityID): Promise<UserEntity> {
+    const user = await this.findOne(ctx, id);
 
     if (!user) {
       throw new UserNotFoundException();
@@ -50,19 +31,23 @@ export class UsersService {
     return user;
   }
 
-  findOneByEmail(email: string, options?: FindOneOptions<UserEntity>): Promise<UserEntity | undefined> {
-    return this.usersRepository.findOne({ email }, options);
+  findOneByEmail(
+    ctx: RequestContext,
+    email: string,
+    options?: FindOneOptions<UserEntity>
+  ): Promise<UserEntity | undefined> {
+    return this.connection.getRepository(ctx, UserEntity).findOne({ email }, options);
   }
 
-  findOneWithPasswordByEmail(email: string): Promise<UserEntity | undefined> {
-    return this.findOneByEmail(email, {
+  findOneForLogin(ctx: RequestContext, email: string): Promise<UserEntity | undefined> {
+    return this.findOneByEmail(ctx, email, {
       select: ['password']
     });
   }
 
-  async create(createUserDto: CreateUserDto, manager?: EntityManager): Promise<UserEntity> {
+  async create(ctx: RequestContext, createUserDto: CreateUserDto): Promise<UserEntity> {
     const { email, password, username } = createUserDto;
-    const emailAlreadyUsedUser = await this.findOneByEmail(email);
+    const emailAlreadyUsedUser = await this.findOneByEmail(ctx, email);
 
     if (emailAlreadyUsedUser) {
       throw new UserEmailAlreadyUsedException();
@@ -74,33 +59,33 @@ export class UsersService {
       password: encryptUserPassword(password)
     });
 
-    return this.getUsersRepository(manager).save(user);
+    return this.connection.getRepository(ctx, UserEntity).save(user);
   }
 
-  async update(updateUserDto: UpdateUserDto, manager: EntityManager): Promise<UserEntity> {
+  async update(ctx: RequestContext, updateUserDto: UpdateUserDto): Promise<UserEntity> {
     const { id, email: willUpdatedEmail } = updateUserDto;
-    const emailAlreadyUsedUser = willUpdatedEmail ? await this.findOneByEmail(willUpdatedEmail) : undefined;
+    const emailAlreadyUsedUser = willUpdatedEmail ? await this.findOneByEmail(ctx, willUpdatedEmail) : undefined;
 
     if (emailAlreadyUsedUser) {
       throw new UserEmailAlreadyUsedException();
     }
 
-    const user = await this.findOneForUpdate(id, manager);
+    const user = await this.findOneOrFail(ctx, id);
     const { email = user.email, username = user.username } = updateUserDto;
     user.email = email;
     user.username = username;
-    return this.getUsersRepository(manager).save(user, { reload: false });
+    return this.connection.getRepository(ctx, UserEntity).save(user, { reload: false });
   }
 
-  async updatePassword(id: string, password: string, manager: EntityManager): Promise<UserEntity> {
-    const user = await this.findOneForUpdate(id, manager);
+  async updatePassword(ctx: RequestContext, id: string, password: string): Promise<UserEntity> {
+    const user = await this.findOneOrFail(ctx, id);
     user.password = encryptUserPassword(password);
-    return this.getUsersRepository(manager).save(user, { reload: false });
+    return this.connection.getRepository(ctx, UserEntity).save(user, { reload: false });
   }
 
-  async delete(id: string, manager: EntityManager): Promise<string> {
-    const user = await this.findOneForUpdate(id, manager);
-    await this.getUsersRepository(manager).remove(user);
+  async delete(ctx: RequestContext, id: string): Promise<string> {
+    const user = await this.findOneOrFail(ctx, id);
+    await this.connection.getRepository(ctx, UserEntity).remove(user);
     return id;
   }
 }
