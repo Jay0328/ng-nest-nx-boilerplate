@@ -18,19 +18,17 @@ export class TransactionalConnection {
   }
 
   getRepository<Entity>(entityClass: ObjectType<Entity>): Repository<Entity>;
-  getRepository<Entity>(ctx: RequestContext | undefined, entityClass: ObjectType<Entity>): Repository<Entity>;
+  getRepository<Entity>(ctx: RequestContext, entityClass: ObjectType<Entity>): Repository<Entity>;
   getRepository<Entity>(
-    ctxOrEntityClass: RequestContext | ObjectType<Entity> | undefined,
+    ctxOrEntityClass: RequestContext | ObjectType<Entity>,
     mayBeEntityClass?: ObjectType<Entity>
   ): Repository<Entity> {
-    if (!ctxOrEntityClass || ctxOrEntityClass instanceof RequestContext) {
-      if (ctxOrEntityClass) {
-        const transactionManager = this.getTransactionManager(ctxOrEntityClass);
+    if (ctxOrEntityClass instanceof RequestContext) {
+      const transactionManager = this.getTransactionManager(ctxOrEntityClass);
 
-        if (transactionManager && transactionManager.queryRunner?.isReleased !== true) {
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          return transactionManager.getRepository(mayBeEntityClass!);
-        }
+      if (transactionManager && transactionManager.queryRunner?.isReleased !== true) {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        return transactionManager.getRepository(mayBeEntityClass!);
       }
 
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
