@@ -1,4 +1,3 @@
 module.exports = {
-  '*.@(js|ts)': ['prettier --write', 'eslint --fix'],
-  '*.@(json|md)': ['prettier --write']
+  '*.{js,ts,html,css,scss,json,md}': ['npm run format --uncommitted']
 };

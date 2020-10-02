@@ -1,0 +1,29 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "typeRoots": ["node_modules/@types"],
+    "lib": ["es2017", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@ng-nest-boilerplate/isomorphic/*": ["libs/isomorphic/src/*"],
+      "@ng-nest-boilerplate/server/common/*": ["libs/server/common/src/*"],
+      "@ng-nest-boilerplate/server/core": ["libs/server/core/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}
