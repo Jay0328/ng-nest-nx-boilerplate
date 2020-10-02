@@ -13,7 +13,7 @@ const resolvers = [UsersResolver, AuthResolver];
 @Module({
   imports: [
     ConfigModule.register({
-      getConfigFile: async () => (await import('../environments/environment')).config
+      getConfigOptions: async () => (await import('../environments/environment')).environment.config
     }),
     CoreModule,
     RequestContextModule,

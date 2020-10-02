@@ -3,7 +3,7 @@ import { CONFIG_TOKEN } from './config-token';
 import { Config } from './config.typings';
 
 export interface ConfigModuleRegisterOptions {
-  getConfigFile: () => Promise<Config>;
+  getConfigOptions: () => Promise<Config>;
 }
 
 @Global()
@@ -12,13 +12,13 @@ export interface ConfigModuleRegisterOptions {
 })
 export class ConfigModule {
   static register(options: ConfigModuleRegisterOptions): DynamicModule {
-    const { getConfigFile } = options;
+    const { getConfigOptions } = options;
     return {
       module: ConfigModule,
       providers: [
         {
           provide: CONFIG_TOKEN,
-          useFactory: getConfigFile
+          useFactory: getConfigOptions
         }
       ],
       exports: [CONFIG_TOKEN]
