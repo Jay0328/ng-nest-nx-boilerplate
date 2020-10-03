@@ -1,6 +1,6 @@
 import { Directive } from '@angular/core';
 
 @Directive({
-  selector: '[nnb-button]'
+  selector: '[nnbButton]'
 })
 export class ButtonDirective {}

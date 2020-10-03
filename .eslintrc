@@ -23,6 +23,13 @@
     "plugin:prettier/recommended"
   ],
   "rules": {
+    "quotes": [
+      "error",
+      "single",
+      {
+        "avoidEscape": true
+      }
+    ],
     "@typescript-eslint/ban-types": [
       "error",
       {

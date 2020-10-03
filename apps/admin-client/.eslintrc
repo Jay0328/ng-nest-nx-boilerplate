@@ -1,1 +1,30 @@
-{ "extends": "../../.eslintrc", "rules": {}, "ignorePatterns": ["!**/*"] }
+{
+  "extends": [
+    "../../.eslintrc",
+    "plugin:@angular-eslint/recommended"
+  ],
+  "parserOptions": {
+    "project": "./tsconfig.*?.json"
+  },
+  "rules": {
+    "@angular-eslint/directive-selector": [
+      "error",
+      {
+        "type": "attribute",
+        "prefix": "nnb",
+        "style": "camelCase"
+      }
+    ],
+    "@angular-eslint/component-selector": [
+      "error",
+      {
+        "type": "element",
+        "prefix": "nnb",
+        "style": "kebab-case"
+      }
+    ]
+  },
+  "ignorePatterns": [
+    "!**/*"
+  ]
+}
