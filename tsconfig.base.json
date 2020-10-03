@@ -22,7 +22,8 @@
     "paths": {
       "@ng-nest-boilerplate/isomorphic/*": ["libs/isomorphic/src/*"],
       "@ng-nest-boilerplate/server/common/*": ["libs/server/common/src/*"],
-      "@ng-nest-boilerplate/server/core": ["libs/server/core/src/index.ts"]
+      "@ng-nest-boilerplate/server/core": ["libs/server/core/src/index.ts"],
+      "@ng-nest-boilerplate/ui": ["libs/ui/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

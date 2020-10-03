@@ -33,6 +33,16 @@
     },
     "isomorphic": {
       "tags": []
+    },
+    "ui": {
+      "tags": []
+    },
+    "admin-client": {
+      "tags": []
+    },
+    "admin-client-e2e": {
+      "tags": [],
+      "implicitDependencies": ["admin-client"]
     }
   }
 }
