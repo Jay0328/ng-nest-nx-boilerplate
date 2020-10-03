@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { AuthPayload, JwtPayload } from '@ng-nest-boilerplate/isomorphic/auth/auth-payload.typings';
+import { AuthPayload, JwtPayload } from '@nnb/isomorphic/auth/auth-payload.typings';
 import { Config, InjectConfig } from '../config';
 import { JwtService } from './jwt.service';
 

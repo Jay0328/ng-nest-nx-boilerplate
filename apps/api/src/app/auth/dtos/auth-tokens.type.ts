@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { AuthTokensDto } from '@ng-nest-boilerplate/server/core';
+import { AuthTokensDto } from '@nnb/server/core';
 
 @ObjectType()
 export class AuthTokens implements AuthTokensDto {

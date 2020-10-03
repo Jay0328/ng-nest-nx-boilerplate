@@ -1,9 +1,9 @@
 import { APP_GUARD, APP_PIPE } from '@nestjs/core';
 import { Module, ValidationPipe } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
-import { ConfigModule, Config, CONFIG_TOKEN } from '@ng-nest-boilerplate/server/common/config';
-import { RequestContextModule } from '@ng-nest-boilerplate/server/common/request-context';
-import { CoreModule } from '@ng-nest-boilerplate/server/core';
+import { ConfigModule, Config, CONFIG_TOKEN } from '@nnb/server/common/config';
+import { RequestContextModule } from '@nnb/server/common/request-context';
+import { CoreModule } from '@nnb/server/core';
 import { RequestContextGuard } from './middlewares/request-context.guard';
 import { UsersResolver } from './users/users.resolver';
 import { AuthResolver } from './auth/auth.resolver';

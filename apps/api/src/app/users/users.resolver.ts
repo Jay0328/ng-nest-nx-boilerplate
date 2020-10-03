@@ -1,9 +1,9 @@
 import { BadRequestException } from '@nestjs/common';
 import { Resolver, Query, Args, Mutation, ID } from '@nestjs/graphql';
-import { UserNotFoundException } from '@ng-nest-boilerplate/isomorphic/users/exceptions/user-not-found.exception';
-import { UserEmailAlreadyUsedException } from '@ng-nest-boilerplate/isomorphic/users/exceptions/user-email-already-used.exception';
-import { RequestContext } from '@ng-nest-boilerplate/server/common/request-context';
-import { UserEntity, UsersService } from '@ng-nest-boilerplate/server/core';
+import { UserNotFoundException } from '@nnb/isomorphic/users/exceptions/user-not-found.exception';
+import { UserEmailAlreadyUsedException } from '@nnb/isomorphic/users/exceptions/user-email-already-used.exception';
+import { RequestContext } from '@nnb/server/common/request-context';
+import { UserEntity, UsersService } from '@nnb/server/core';
 import { Ctx } from '../decorators/request-context.decorator';
 import { Auth } from '../decorators/auth.decorator';
 import { Transaction } from '../decorators/transaction.decorator';

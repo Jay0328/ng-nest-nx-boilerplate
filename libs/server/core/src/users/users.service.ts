@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { FindOneOptions } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { UserNotFoundException } from '@ng-nest-boilerplate/isomorphic/users/exceptions/user-not-found.exception';
-import { UserEmailAlreadyUsedException } from '@ng-nest-boilerplate/isomorphic/users/exceptions/user-email-already-used.exception';
-import { RequestContext } from '@ng-nest-boilerplate/server/common/request-context';
-import { TransactionalConnection } from '@ng-nest-boilerplate/server/common/orm';
+import { UserNotFoundException } from '@nnb/isomorphic/users/exceptions/user-not-found.exception';
+import { UserEmailAlreadyUsedException } from '@nnb/isomorphic/users/exceptions/user-email-already-used.exception';
+import { RequestContext } from '@nnb/server/common/request-context';
+import { TransactionalConnection } from '@nnb/server/common/orm';
 import { UserEntity } from './user.entity';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';

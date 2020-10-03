@@ -1,7 +1,7 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
 import { Observable, of } from 'rxjs';
-import { TransactionalConnection, TRANSACTIONAL_MANAGER_KEY } from '@ng-nest-boilerplate/server/common/orm';
-import { RequestContext } from '@ng-nest-boilerplate/server/common//request-context';
+import { TransactionalConnection, TRANSACTIONAL_MANAGER_KEY } from '@nnb/server/common/orm';
+import { RequestContext } from '@nnb/server/common//request-context';
 import { getRequestFromExecutionContext } from '../common/get-request-from-execution-context';
 
 @Injectable()

@@ -1,8 +1,6 @@
 import { Directive } from '@angular/core';
 
 @Directive({
-  selector: '[ngNestBoilerplateButton]'
+  selector: '[nnb-button]'
 })
-export class ButtonDirective {
-  constructor() {}
-}
+export class ButtonDirective {}

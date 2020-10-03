@@ -1,8 +1,8 @@
 import { Resolver, Mutation, Args } from '@nestjs/graphql';
 import { BadRequestException, InternalServerErrorException } from '@nestjs/common';
-import { InvalidRefreshTokenException } from '@ng-nest-boilerplate/isomorphic/auth/exceptions/invalid-refresh-token.exception';
-import { RequestContext } from '@ng-nest-boilerplate/server/common/request-context';
-import { AuthService } from '@ng-nest-boilerplate/server/core';
+import { InvalidRefreshTokenException } from '@nnb/isomorphic/auth/exceptions/invalid-refresh-token.exception';
+import { RequestContext } from '@nnb/server/common/request-context';
+import { AuthService } from '@nnb/server/core';
 import { Ctx } from '../decorators/request-context.decorator';
 import { AuthTokens } from './dtos/auth-tokens.type';
 import { LoginArgs } from './dtos/login.args';

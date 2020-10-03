@@ -1,6 +1,6 @@
 import { ArgsType, Field } from '@nestjs/graphql';
 import { IsUUID, IsEmail, IsOptional } from 'class-validator';
-import { UpdateUserDto, isUsername } from '@ng-nest-boilerplate/server/core';
+import { UpdateUserDto, isUsername } from '@nnb/server/core';
 
 @ArgsType()
 export class UpdateUserArgs implements UpdateUserDto {

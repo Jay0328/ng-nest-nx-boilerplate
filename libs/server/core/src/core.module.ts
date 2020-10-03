@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Config, CONFIG_TOKEN } from '@ng-nest-boilerplate/server/common/config';
-import { JwtModule } from '@ng-nest-boilerplate/server/common/jwt/jwt.module';
-import { TransactionalConnection } from '@ng-nest-boilerplate/server/common/orm';
+import { Config, CONFIG_TOKEN } from '@nnb/server/common/config';
+import { JwtModule } from '@nnb/server/common/jwt/jwt.module';
+import { TransactionalConnection } from '@nnb/server/common/orm';
 import { UserEntity, UsersService } from './users';
 import { AuthService } from './auth';
 

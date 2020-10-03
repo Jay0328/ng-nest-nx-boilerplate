@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { AuthPayload } from '@ng-nest-boilerplate/isomorphic/auth/auth-payload.typings';
+import { AuthPayload } from '@nnb/isomorphic/auth/auth-payload.typings';
 
 /**
  * @description

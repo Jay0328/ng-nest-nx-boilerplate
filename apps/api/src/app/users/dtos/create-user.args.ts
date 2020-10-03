@@ -1,6 +1,6 @@
 import { ArgsType, Field } from '@nestjs/graphql';
 import { IsEmail, IsString, IsNotEmpty } from 'class-validator';
-import { CreateUserDto, isUsername } from '@ng-nest-boilerplate/server/core';
+import { CreateUserDto, isUsername } from '@nnb/server/core';
 
 @ArgsType()
 export class CreateUserArgs implements CreateUserDto {

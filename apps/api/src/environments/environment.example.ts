@@ -1,6 +1,6 @@
 import * as path from 'path';
 import { getMetadataArgsStorage } from 'typeorm';
-import { Config } from '@ng-nest-boilerplate/server/common/config';
+import { Config } from '@nnb/server/common/config';
 
 const config: Config = {
   database: {

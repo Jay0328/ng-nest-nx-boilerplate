@@ -1,5 +1,5 @@
 {
-  "npmScope": "ng-nest-boilerplate",
+  "npmScope": "nnb",
   "affected": {
     "defaultBase": "master"
   },

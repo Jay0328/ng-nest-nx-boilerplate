@@ -1,7 +1,7 @@
 import { Entity, DeepPartial, PrimaryGeneratedColumn, Column, Unique, Index } from 'typeorm';
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Exclude } from 'class-transformer';
-import { BaseEntity, CreateDateColumn, UpdateDateColumn } from '@ng-nest-boilerplate/server/common/orm';
+import { BaseEntity, CreateDateColumn, UpdateDateColumn } from '@nnb/server/common/orm';
 
 /**
  * Email should be unique.

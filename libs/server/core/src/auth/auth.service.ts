@@ -1,8 +1,8 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { InvalidRefreshTokenException } from '@ng-nest-boilerplate/isomorphic/auth/exceptions/invalid-refresh-token.exception';
-import { AccessTokenService, RefreshTokenService } from '@ng-nest-boilerplate/server/common/jwt';
-import { RequestContext } from '@ng-nest-boilerplate/server/common/request-context';
+import { InvalidRefreshTokenException } from '@nnb/isomorphic/auth/exceptions/invalid-refresh-token.exception';
+import { AccessTokenService, RefreshTokenService } from '@nnb/server/common/jwt';
+import { RequestContext } from '@nnb/server/common/request-context';
 import { UserEntity, UsersService } from '../users';
 import { AuthTokensDto } from './dtos/auth-tokens.dto';
 
